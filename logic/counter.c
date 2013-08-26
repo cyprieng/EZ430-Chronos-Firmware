@@ -59,8 +59,8 @@ void display_counter(u8 line, u8 update)
 
 		case DISPLAY_LINE_UPDATE_PARTIAL:
 			// Display result in xx.x format
-			str = int_to_array(sCounter.count, 4, 0);
-			display_chars(LCD_SEG_L2_3_0, str, SEG_ON);
+			str = int_to_array(sCounter.count, 5, 0);
+			display_chars(LCD_SEG_L2_4_0, str, SEG_ON);
 
 			display.flag.update_counter = 0;
 		break;
