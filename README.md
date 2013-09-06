@@ -13,6 +13,12 @@ Look the link above for details on the configuration.
 Pedometer
 ---------
 It comes from [here](http://ez430chronos.blogspot.fr/2012/08/pedometer.html).
+But I have changed some details:
+
+* The pedometer appears on the bottom line
+* There are 5 digits (counter up to 99999)
+* When you hold (#), the counter is reinitialized
+* When you press the down arrow, you switch between 3 display types (number of movements -> percent relative to a reference of 15000 movements -> progress bar: one '-' for each 20%)
 
 Other changes
 -------------

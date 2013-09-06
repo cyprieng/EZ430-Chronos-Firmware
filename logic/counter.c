@@ -25,13 +25,16 @@ void reset_counter(void)
 	sCounter.style = 0;
 }
 
-void mx_counter(u8 line){}
-
-void sx_counter(u8 line)
-{
+void mx_counter(u8 line){
 	// reset counter
 	sCounter.count = 0;
 	display.flag.update_counter = 1;
+}
+
+void sx_counter(u8 line){
+	sCounter.style++;
+	if(sCounter.style > 2) sCounter.style = 0;
+	display_counter(NULL, DISPLAY_LINE_UPDATE_PARTIAL);
 }
 
 void display_counter(u8 line, u8 update)
@@ -58,10 +61,36 @@ void display_counter(u8 line, u8 update)
 		sCounter.state = MENU_ITEM_VISIBLE;
 
 		case DISPLAY_LINE_UPDATE_PARTIAL:
-			// Display result in xx.x format
-			str = int_to_array(sCounter.count, 5, 0);
-			display_chars(LCD_SEG_L2_4_0, str, SEG_ON);
+			if(sCounter.style == 0){
+				// Display result in xxxxx format
+				str = int_to_array(sCounter.count, 5, 0);
+				display_chars(LCD_SEG_L2_4_0, str, SEG_ON);
+			}
+			else if(sCounter.style == 1){
+				// Display result in percent
+				s8 percent = sCounter.count / 150;
+				str = int_to_array(percent, 3, 0);
+				display_chars(LCD_SEG_L2_2_0, str, SEG_ON);
+			}
+			else{
+				// Display result in progress bar
+				s8 squareNum = sCounter.count / 3000;
+				if(squareNum > 5) squareNum = 5;
 
+				switch (squareNum)
+				{
+					case 5:
+						display_char(LCD_SEG_L2_4, '-', SEG_ON);
+					case 4:
+						display_char(LCD_SEG_L2_3, '-', SEG_ON);
+					case 3:
+						display_char(LCD_SEG_L2_2, '-', SEG_ON);
+					case 2:
+						display_char(LCD_SEG_L2_1, '-', SEG_ON);
+					case 1:
+						display_char(LCD_SEG_L2_0, '-', SEG_ON);
+				}
+			}
 			display.flag.update_counter = 0;
 		break;
 		case DISPLAY_LINE_CLEAR:
